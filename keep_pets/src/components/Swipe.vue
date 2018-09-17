@@ -79,10 +79,10 @@
 
 <script>
 
-  import image1 from '../../static/images/dog1.jpg'
-  import image2 from '../../static/images/dog2.jpg'
-  import image3 from '../../static/images/cat.jpg'
+  import image1 from '../../static/images/cat3.jpg'
   import image4 from '../../static/images/dog3.jpg'
+  import image5 from '../../static/images/dog5.jpg'
+  import image6 from '../../static/images/dog6.jpg'
 
   export default {
     data(){
@@ -90,9 +90,9 @@
       return{
         initSuccess: false,
         Imglist:[
-          {url:image1,text:"为动物找寻一个温暖的家"},
-          {url:image2,text:"拯救街头流浪的小可爱"},
-          {url:image3,text:"为拯救流浪动物献出你的一份力量！"},
+          {url:image5,text:"为动物找寻一个温暖的家"},
+          {url:image1,text:"拯救街头流浪的小可爱"},
+          {url:image6,text:"请献出你的一份力量！"},
           {url:image4,text:"为人类和动物同时带去温暖"}
         ],
         Pets:[
@@ -104,6 +104,7 @@
           {id:6,url:image1},
           {id:7,url:image1},
           {id:8,url:image1},
+          {id:9,url:image1},
         ],
         input:'',
 

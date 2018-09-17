@@ -69,7 +69,8 @@
               <el-input v-model.number="userregisterform.age " class="input_box"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submitForm('userregisterform')">提交</el-button>
+              <el-button type="primary" @click="submitForm('userregisterform')">注册成为领养人</el-button>
+              <el-button type="primary" @click="submitForm('userregisterform')">注册成为志愿者</el-button>
               <el-button @click="resetForm('userregisterform')">重置</el-button>
             </el-form-item>
           </el-form>
@@ -281,7 +282,7 @@ width: 80%;
   text-align: left;
   left: 20%;
   top: 60%;
-  font-size: 5em;
+  font-size: 6em;
   font-family: "Hiragino Sans GB";
 }
   .topmenu{

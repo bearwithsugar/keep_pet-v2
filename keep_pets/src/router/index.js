@@ -13,6 +13,8 @@ import user from '../components/userMessage'
 import detail from '../components/detailOfPets'
 import test from '../components/characterTest'
 import show_manager from '../components/manager/show_manager'
+import detail_manager from '../components/manager/detail_manager'
+import add_manager from '../components/manager/add_manager'
 
 import 'vue2-animate/dist/vue2-animate.min.css'
 import vueResource from 'vue-resource'
@@ -46,6 +48,11 @@ export default new Router({
           path:'show_manager',
           name:'show_manager',
           component:show_manager,
+        },
+        {
+          path:'detail_manager',
+          name:'detail_manager',
+          component:detail_manager,
         }
       ]
 

@@ -4,11 +4,21 @@
     <el-col :span="8" v-for="(o, index) in 20" :key="o" :offset=" 2 ">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>小王</span>
-          <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+          <div style="float: left;font-size: 1.5em">
+            姓名
+          </div>
+          <router-link to="/main/detail_manager">
+            <el-button style="float: right; padding: 3px 0" type="text" >查看详细信息</el-button>
+          </router-link>
         </div>
-        <div v-for="o in 4" :key="o" class="text item">
-          {{'列表内容 ' + o }}
+        <div class="text item">
+          性别
+        </div>
+        <div class="text item">
+          年龄
+        </div>
+        <div class="text item">
+          所在地：xxx
         </div>
       </el-card>
     </el-col>
@@ -18,7 +28,11 @@
 
 <script>
   export default {
+    methods:{
+      showdetails(){
 
+      }
+    }
   }
 </script>
 
