@@ -1,7 +1,7 @@
 'use strict'
 const path = require('path')
 const utils = require('./utils')
-const config = require('../config')
+const config = require('../../../pets/keep_pets/config/index')
 const vueLoaderConfig = require('./vue-loader.conf')
 
 

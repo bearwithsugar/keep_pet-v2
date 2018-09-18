@@ -3,6 +3,7 @@
       <div class="topmenu">
         <el-menu  class="el-menu-demo" mode="horizontal" style="background-color:rgba(255,255,255,0.3);">
           <el-menu-item index="1" @click="toMain">主页</el-menu-item>
+          <el-menu-item index="2" @click="toSave">救助</el-menu-item>
           <el-submenu index="5">
             <template slot="title">消息中心</template>
             <el-menu-item index="5-1">系统消息</el-menu-item>
@@ -55,21 +56,34 @@
 
         <el-dialog title="注册" :visible.sync="registerFormVisible">
          <el-form :model="userregisterform" status-icon :rules="rules2" ref="userregisterform" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="用户名" prop="username" >
-              <el-input v-model="userregisterform.username" class="input_box" auto-complete="off"></el-input>
+            <el-form-item label="姓名" prop="adName" >
+              <el-input v-model="userregisterform.adName" class="input_box" auto-complete="off"></el-input>
             </el-form-item>
+           <el-form-item label="性别" prop="gender" >
+             <RadioGroup v-model="userregisterform.gender">
+               <Radio label="1">
+                 <span>男</span>
+               </Radio>
+               <Radio label="2">
+                 <span>女</span>
+               </Radio>
+             </RadioGroup>
+           </el-form-item>
+           <el-form-item label="身份证号" prop="idCard" >
+             <el-input v-model="userregisterform.idCard" class="input_box" auto-complete="off"></el-input>
+           </el-form-item>
+           <el-form-item label="账号" prop="account">
+             <el-input v-model.number="userregisterform.account " class="input_box"></el-input>
+           </el-form-item>
           <!--通过 rules 属性传入约定的验证规则,使用status-icon属性为输入框添加了表示校验结果的反馈图标,prop 属性设置为需校验的字段名-->
-            <el-form-item label="密码" prop="pass">
-              <el-input type="password" v-model="userregisterform.pass" class="input_box" auto-complete="off"></el-input>
+            <el-form-item label="密码" prop="password">
+              <el-input type="password" v-model="userregisterform.password" class="input_box" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="确认密码" prop="checkPass">
               <el-input type="password" v-model="userregisterform.checkPass" class="input_box" auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="年龄" prop="age">
-              <el-input v-model.number="userregisterform.age " class="input_box"></el-input>
-            </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submitForm('userregisterform')">注册成为领养人</el-button>
+              <el-button type="primary" @click="registertoUser">注册成为领养人</el-button>
               <el-button type="primary" @click="submitForm('userregisterform')">注册成为志愿者</el-button>
               <el-button @click="resetForm('userregisterform')">重置</el-button>
             </el-form-item>
@@ -81,9 +95,8 @@
 
 <script>
 
-  import main_ui from './components/Main'
-
   import swipe from './components/Swipe'
+  import common from './com/common'
 
 export default {
   name: 'App',
@@ -91,7 +104,7 @@ export default {
     //注册验证
     var checkUsername = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('         用户名不能为空'));
+        return callback(new Error('         昵称不能为空'));
       }
       else {
         setTimeout(() => {
@@ -99,28 +112,42 @@ export default {
         }, 1000);
       }
     };
-    var checkAge = (rule, value, callback) => {
+    var checkIdcard = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('         年龄不能为空'));
+        return callback(new Error('         身份证不能为空'));
       }
-      setTimeout(() => {
-        if (!Number.isInteger(value)) {
-          callback(new Error('         请输入数字值'));
-        } else {
-          if (value < 18) {
-            callback(new Error('         必须年满18岁'));
-          } else {
-            callback();
-          }
-        }
-      }, 1000);
+      else {
+        setTimeout(() => {
+          callback();
+        }, 1000);
+      }
+    };
+    var checkAccount = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('         账号不能为空'));
+      }
+      else {
+        setTimeout(() => {
+          callback();
+        }, 1000);
+      }
+    };
+    var checkPhone= (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('         电话号不能为空'));
+      }
+      else {
+        setTimeout(() => {
+          callback();
+        }, 1000);
+      }
     };
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('         请输入密码'));
       } else {
-        if (this.userregisterform.checkPass !== '') {
-          this.$refs.userregisterform.validateField('checkPass');
+        if (this.checkPass !== '') {
+          console.log("二次密码不为空")
         }
         callback();
       }
@@ -128,7 +155,7 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('         请再次输入密码'));
-      } else if (value !== this.userregisterform.pass) {
+      } else if (value !== this.userregisterform.password) {
         callback(new Error('         两次输入密码不一致!'));
       } else {
         callback();
@@ -136,29 +163,39 @@ export default {
     };
 
     return {
+      checkPass: '',
       isUser:true,
       isVolunteer:true,
       isManiger:true,
       isSuperManiger:true,
       notlogin:true,
       userregisterform: {
-        username:'',
-        pass: '',
-        checkPass: '',
-        age: ''
+        adName:'',
+        gender:1,
+        idCard:'',
+        accound:'',
+        password: '',
+        phone: '',
+        checkpass:''
       },
       rules2: {
-        username: [
+        adName: [
           { validator: checkUsername, trigger: 'blur' }
         ],
-        pass: [
+        idCard: [
+          { validator: checkIdcard, trigger: 'blur' }
+        ],
+        phone: [
+          { validator: checkPhone, trigger: 'blur' }
+        ],
+        account: [
+          { validator: checkAccount, trigger: 'blur' }
+        ],
+        password: [
           { validator: validatePass, trigger: 'blur' }
         ],
         checkPass: [
           { validator: validatePass2, trigger: 'blur' }
-        ],
-        age: [
-          { validator: checkAge, trigger: 'blur' }
         ]
       },
       loginFormVisible: false,
@@ -197,29 +234,20 @@ export default {
     toMain:function() {
       this.$router.push('/');
     },
-    test(){
-      // return new Promise((resolve, reject) => {
-      //   Vue.$http.post(
-      //     url,
-      //     {
-      //       params
-      //     },
-      //     {emulateJSON: true}
-      //   )
-      //     .then((res) => {    //成功胡回调
-      //       resolve(res.body);
-      //     })
-      //     .catch((res) => {   //失败的回掉
-      //       reject(res.body);
-      //     });
-      // });
+    registertoUser(){
+      delete this.userregisterform.checkpass
+      var url=common.apiurl+"/aregister"
+      var a = JSON.stringify(this.userregisterform);
 
+      console.log(a)
+      this.$http.post(url,a,{emulateJSON:true}).then(function (res) {
+        console.log(res)
+      })
     }
 
   },
   components:{
     swipe,
-    main_ui
   }
 }
 </script>

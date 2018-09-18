@@ -18,10 +18,10 @@
                   <Radio label="猫类">
                     <span>猫类</span>
                   </Radio>
-                  <Radio label="android">
+                  <Radio label="狗类">
                     <span>狗类</span>
                   </Radio>
-                  <Radio label="windows">
+                  <Radio label="其他">
                     <span>其他</span>
                   </Radio>
                 </RadioGroup>
@@ -90,26 +90,52 @@
               <el-form-item label="地址">
                 <el-input type="textarea" v-model="form.address"></el-input>
               </el-form-item>
-              <el-form-item label="图片">
-                <el-input type="textarea" v-model="form.picture"></el-input>
-              </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="postMessage">立即申请</el-button>
+                <el-button type="primary" @click="postMessage">继续添加图片</el-button>
                 <el-button>取消</el-button>
               </el-form-item>
             </el-form>
           </el-card>
         </el-col>
       </el-row>
+      <transition name="el-zoom-in-top">
+        <el-card v-show="show2" class="box-card transition-box">
+          <el-form ref="form"  label-width="80px">
+            <el-upload
+              :action="pictureurl"
+              list-type="picture-card"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+            :data="test">
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
+
+          </el-form>
+          <el-button style="float: right; padding: 3px 0;color: coral;margin: 10px" type="text" @click="show2 = false">取消</el-button>
+          <el-button style="float: right; padding: 3px 0;color: coral;margin: 10px" type="text" @click="show2 = false">确认</el-button>
+
+        </el-card>
+      </transition>
 
     </div>
   </transition>
+
 </template>
 
 <script>
+  import common from '../com/common'
   export default {
     data() {
       return {
+        pictureurl:common.apiurl+"helpanimal/registPicture",
+        show2: false,
+        dialogImageUrl: '',
+        dialogVisible: false,
+
+        test:{anno:''},
         form: {
           anname: '',
           variety:'',
@@ -120,8 +146,6 @@
           character:'',
           description: '',
           address: '',
-          picture:'',
-
         },
         initSuccess: false,
       }
@@ -140,14 +164,23 @@
         }, (Number(vm.time || 500)));
       },
       postMessage(){
-        var url="http://10.10.3.135:8082/helpanimal/registAnimal"
+        var url=common.apiurl+"helpanimal/registAnimal"
         var a = JSON.stringify(this.form);
 
          console.log(a)
         this.$http.post(url,a,{emulateJSON:true}).then(function (res) {
           console.log(res)
+          this.test.anno=res.data.data
           // alert(res)
         })
+        this.show2=true
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
       }
     }
 

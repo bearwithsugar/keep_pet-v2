@@ -8,7 +8,8 @@
     <el-carousel height="700px">
       <el-carousel-item v-for="(image,index) in Imglist" :key="Imglist">
         <div style="position: relative ;    height: 500px;">
-          <div style="position: absolute;z-index: 2"  ><img :src=image.url width="100%"></div>
+          <div style="position: absolute;z-index: 2"  >
+            <img :src=image.url width="100%"></div>
           <div class="image_text" v-text=image.text></div>
         </div>
       </el-carousel-item>
@@ -16,11 +17,15 @@
 
     <div style="background: white;padding: 5%">
       <el-card class="box-card" :body-style="{ padding: '0px' }">
-        <el-input
-          placeholder="请输入内容"
-          v-model="input"
-          clearable>
-        </el-input>
+        <div >
+          <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
+
+            <!--<router-link to="/search">-->
+              <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
+            <!--</router-link>-->
+            <el-button slot="append" icon="el-icon-search" @click="toSearch"></el-button>
+          </el-input>
+        </div>
       </el-card>
     </div>
 
@@ -51,12 +56,12 @@
     </div>
 
     <el-row class="show_pets">
-      <el-col :span="8" v-for="(pet,index) in Pets" :offset="index > 0 ? 2 : 0" :key="Pets">
-        <router-link v-bind="{to:'/detail/'+pet.id}"  style="text-decoration: none">
+      <el-col :span="8" v-for="(pet,index) in petsMessage" :offset="index > 0 ? 2 : 0" :key="petsMessage">
+        <router-link v-bind="{to:'/detail/'+pet.anno}"  style="text-decoration: none">
           <el-card :body-style="{ padding: '0px' }" shadow="hover" >
-            <img :src=pet.url class="image">
+            <img src="../../static/images/cat3.jpg" class="image">
             <div style="padding: 14px;">
-              <span>好吃的汉堡</span>
+              <span>{{pet.anname}}</span>
               <div class="bottom clearfix">
                 <time class="time">{{ currentDate }}</time>
                 <el-button type="text" class="button" >操作按钮</el-button>
@@ -84,11 +89,14 @@
   import image5 from '../../static/images/dog5.jpg'
   import image6 from '../../static/images/dog6.jpg'
 
+  import common from '../com/common'
+
   export default {
     data(){
 
       return{
         initSuccess: false,
+        petsMessage:[],
         Imglist:[
           {url:image5,text:"为动物找寻一个温暖的家"},
           {url:image1,text:"拯救街头流浪的小可爱"},
@@ -299,12 +307,12 @@
           }]
         }],
         selectedOptions: [],
-        selectedOptions2: []
 
       }
     },
     created() {
       this.initSlot();
+      this.gethot()
     },
     methods: {
       handleChange(value) {
@@ -315,7 +323,23 @@
         setTimeout(function () {
           vm.initSuccess = true;
         }, (Number(vm.time || 500)));
-      }
+      },
+      gethot(){
+        console.log("开始获取")
+        var url = common.apiurl+'helpanimal/showAll';
+
+        this.$http.get(url).then(function (response) {
+          console.log(response)
+          var msg = response.body;
+          this.petsMessage=msg.data;
+          console.log(this.petsMessage)
+        });
+
+
+      },
+      toSearch:function() {
+        this.$router.push('/search');
+      },
 
     }
 
@@ -391,4 +415,7 @@
     padding: 0px;
   }
 
+  .input-with-select .el-input-group__prepend {
+    background-color: #fff;
+  }
 </style>

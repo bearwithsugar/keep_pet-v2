@@ -48,6 +48,8 @@
   export default {
     data() {
       return {
+        dialogImageUrl: '',
+        dialogVisible: false,
         editshare:'',
         initSuccess: false,
         currentDate: new Date()
@@ -66,6 +68,13 @@
       },
       resetedit(){
         this.editshare=''
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
       }
     }
   }
@@ -115,4 +124,5 @@
   .back_color{
     background-color:rgba(0,0,0,0.5);
   }
+
 </style>

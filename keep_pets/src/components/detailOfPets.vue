@@ -7,13 +7,6 @@
         <el-col :span="8" >
           <el-card :body-style="{ padding: '0px' }">
             <img src="../../static/images/cat.jpg" class="image">
-            <!--<div style="padding: 14px;">-->
-              <!--<span>好吃的汉堡</span>-->
-              <!--<div class="bottom clearfix">-->
-                <!--<time class="time">{{ currentDate }}</time>-->
-                <!--<el-button type="text" class="button">操作按钮</el-button>-->
-              <!--</div>-->
-            <!--</div>-->
           </el-card>
         </el-col>
       </el-row>
@@ -25,23 +18,42 @@
           <!--{{item.label}}-->
         <!--</div>-->
       <div class="text item" style="color: white">
-        英国短毛猫
+        {{pet.anname}}
       </div>
 
       <div class="text item" style="color: white">
-        2岁
+        {{pet.age}}
       </div>
 
       <div class="text item" style="color: white">
-        英国短毛猫，体形圆胖，四肢粗短发达，毛短而密，头大脸圆，温柔平静，对人友善，极易饲养。大而圆的眼睛根据被毛不同而呈现各种颜色。作为一个古老的猫品种，其历史可追溯至古罗马时期的家猫，由于拥有悠久的育种历史，可以称得上是猫家族中的典范。英国短毛猫除了拥有固定而聚，代表性的遗传特征之外，又具有丰富的变异性，如背毛色眼睛颜色等。更重要的是，有了广泛的配种历史后，这种猫拥有了更健康的身体和更温驯的性格。
+        {{pet.gender}}
       </div>
 
       <div class="text item" style="color: white">
-        毛质
-        英短乳白色
-        英短乳白色
-        短而密的绒毛， 富有弹性，可将全身紧密地包住。抗寒性好。
+        {{pet.hair}}
       </div>
+
+      <div class="text item" style="color: white">
+        {{pet.isenable}}
+      </div>
+      <div class="text item" style="color: white">
+        {{pet.scale}}
+      </div>
+      <div class="text item" style="color: white">
+        {{pet.variety}}
+      </div>
+      <div class="text item" style="color: white">
+        {{pet.address}}
+      </div>
+      <div class="text item" style="color: white">
+        {{pet.character}}
+      </div>
+
+      <div class="text item" style="color: white">
+        {{pet.description}}
+      </div>
+
+
 
       <div style="padding-bottom: 10%" size="medium">
         <el-button type="success">立刻领养</el-button>
@@ -55,23 +67,25 @@
 </template>
 
 <script>
+  import common from '../com/common'
   export default {
 
     data(){
 
 
       return{
-        id:0,
+        pet:{},
+        id:{anno:''},
         initSuccess:false,
         currentDate: new Date(),
-        msg:[]
+        petDetail:[]
       }
 
     },
     created(){
-      this.id=this.$route.params.id;
+      this.id.anno=this.$route.params.id;
       this.initSlot();
-      this.getmeg()
+      this.postPetid()
     },
     methods:{
       testone(){
@@ -83,18 +97,17 @@
           vm.initSuccess = true;
         }, (Number(vm.time || 500)));
       },
-      getmeg(){
-        var url='../../static/address.json'
-        this.$http.get(url).then(function (response) {
-          var  data=response.body;
+      postPetid(){
+        var url= common.apiurl+"helpanimal/showSingle"
+        var a = JSON.stringify(this.id);
+        console.log(a)
+        this.$http.post(url,a,{emulateJSON:true}).then(function (res) {
+           this.pet=res.data.data
 
-          this.msg=data;
-          console.log("获取服务器参数");
-          console.log(data)
+          console.log(this.pet)
+          console.log(this.pet.anname)
 
-        }).catch(function (response) {
-          alert(response);
-        });
+        })
       }
     }
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-upload
-      action="https://jsonplaceholder.typicode.com/posts/"
+      action="http://192.168.43.236:8082/helpanimal/registPicture"
       list-type="picture-card"
       :on-preview="handlePictureCardPreview"
       :on-remove="handleRemove">

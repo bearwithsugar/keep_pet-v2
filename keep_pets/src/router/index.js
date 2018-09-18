@@ -6,7 +6,7 @@ Vue.use(Router)
 
 import main from '../components/Main'
 import swipe from '../components/Swipe'
-import uploud from '../components/Uploud'
+import upload from '../components/Upload'
 import save from '../components/saveMessage'
 import share from '../components/sharePets'
 import user from '../components/userMessage'
@@ -15,6 +15,7 @@ import test from '../components/characterTest'
 import show_manager from '../components/manager/show_manager'
 import detail_manager from '../components/manager/detail_manager'
 import add_manager from '../components/manager/add_manager'
+import search from '../components/search/search'
 
 import 'vue2-animate/dist/vue2-animate.min.css'
 import vueResource from 'vue-resource'
@@ -25,6 +26,7 @@ export default new Router({
   // linkActiveClass:'is-link',
   routes: [
     {path: '/', name: 'App', component:swipe},
+    {path:'/search',name:'search',component:search},
     {path: '/main', name: 'main',component:main, children:[
         {
           path: 'usermessage',
@@ -53,6 +55,11 @@ export default new Router({
           path:'detail_manager',
           name:'detail_manager',
           component:detail_manager,
+        },
+        {
+          path:'upload',
+          name:'upload',
+          component:upload,
         }
       ]
 

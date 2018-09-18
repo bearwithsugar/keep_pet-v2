@@ -1,8 +1,8 @@
 'use strict'
 const path = require('path')
-const config = require('../config')
+const config = require('../../../pets/keep_pets/config/index')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const packageConfig = require('../package.json')
+const packageConfig = require('../../../pets/keep_pets/package.json')
 
 exports.assetsPath = function (_path) {
   const assetsSubDirectory = process.env.NODE_ENV === 'production'
