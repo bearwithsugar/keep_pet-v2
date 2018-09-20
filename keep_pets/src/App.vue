@@ -1,9 +1,11 @@
 <template>
   <div id="app">
+      <!--顶部菜单-->
       <div class="topmenu">
         <el-menu  class="el-menu-demo" mode="horizontal" style="background-color:rgba(255,255,255,0.3);">
           <el-menu-item index="1" @click="toMain">主页</el-menu-item>
           <el-menu-item index="2" @click="toSave">救助</el-menu-item>
+          <el-menu-item index="3" @click="toApplyprocess">申请进程</el-menu-item>
           <el-submenu index="5">
             <template slot="title">消息中心</template>
             <el-menu-item index="5-1">系统消息</el-menu-item>
@@ -24,32 +26,33 @@
         <router-view></router-view>
       </div>
       <div>
+        <!--登录界面-->
         <el-dialog title="登录" :visible.sync="loginFormVisible">
           <el-form :model="userloginform">
             <el-form-item label="用户名"  >
-              <el-input v-model="userloginform.name" class="input_box" auto-complete="off"></el-input>
+              <el-input v-model="userloginform.username" class="input_box" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="密  码">
-              <el-input  type="password" class="input_box" auto-complete="off"></el-input>
+              <el-input  v-model="userloginform.password" type="password" class="input_box" auto-complete="off"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="loginFormVisible = false">取 消</el-button>
-            <router-link :to="{
-                      name: 'main',
-                      params: {
-                          user: 'superManger'
-                      }
-                  }">
-              <el-button type="primary" @click="loginFormVisible = false;notlogin=false" >超级管理员登录</el-button>
-            </router-link>
+            <!--<router-link :to="{-->
+                      <!--name: 'main',-->
+                      <!--params: {-->
+                          <!--user: 'superManger'-->
+                      <!--}-->
+                  <!--}">-->
+              <el-button type="primary" @click="login">登录</el-button>
+            <!--</router-link>-->
             <router-link :to="{
                       name: 'main',
                       params: {
                           user: 'user'
                       }
                   }">
-              <el-button type="primary" @click="loginFormVisible = false;notlogin=false" >普通用户登录登录</el-button>
+              <el-button type="primary" @click="loginFormVisible = false" >普通用户登录登录</el-button>
             </router-link>
           </div>
         </el-dialog>
@@ -72,6 +75,9 @@
            <el-form-item label="身份证号" prop="idCard" >
              <el-input v-model="userregisterform.idCard" class="input_box" auto-complete="off"></el-input>
            </el-form-item>
+           <el-form-item label="城市" prop="city" >
+             <el-input v-model="userregisterform.city" class="input_box" auto-complete="off"></el-input>
+           </el-form-item>
            <el-form-item label="账号" prop="account">
              <el-input v-model.number="userregisterform.account " class="input_box"></el-input>
            </el-form-item>
@@ -83,12 +89,13 @@
               <el-input type="password" v-model="userregisterform.checkPass" class="input_box" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="registertoUser">注册成为领养人</el-button>
-              <el-button type="primary" @click="submitForm('userregisterform')">注册成为志愿者</el-button>
+              <el-button type="primary" @click="submitForm('userregisterform')">注册成为领养人</el-button>
+              <el-button type="primary" @click="registertoVolunteer">注册成为志愿者</el-button>
               <el-button @click="resetForm('userregisterform')">重置</el-button>
             </el-form-item>
           </el-form>
         </el-dialog>
+
       </div>
     </div>
 </template>
@@ -104,7 +111,7 @@ export default {
     //注册验证
     var checkUsername = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('         昵称不能为空'));
+        return callback(new Error('         姓名不能为空'));
       }
       else {
         setTimeout(() => {
@@ -125,6 +132,16 @@ export default {
     var checkAccount = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('         账号不能为空'));
+      }
+      else {
+        setTimeout(() => {
+          callback();
+        }, 1000);
+      }
+    };
+    var checkCity = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('         地址不能为空'));
       }
       else {
         setTimeout(() => {
@@ -163,20 +180,18 @@ export default {
     };
 
     return {
+      accountid:'',
       checkPass: '',
-      isUser:true,
-      isVolunteer:true,
-      isManiger:true,
-      isSuperManiger:true,
       notlogin:true,
       userregisterform: {
-        adName:'',
+        name:'',
         gender:1,
         idCard:'',
         accound:'',
         password: '',
         phone: '',
-        checkpass:''
+        checkpass:'',
+        city:''
       },
       rules2: {
         adName: [
@@ -184,6 +199,9 @@ export default {
         ],
         idCard: [
           { validator: checkIdcard, trigger: 'blur' }
+        ],
+        city: [
+          { validator: checkCity, trigger: 'blur' }
         ],
         phone: [
           { validator: checkPhone, trigger: 'blur' }
@@ -201,16 +219,16 @@ export default {
       loginFormVisible: false,
       registerFormVisible:false,
       userloginform: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        username: '',
+        password:''
       },
+      usermsg:{}
     };
+  },
+  created(){
+    // if(this.usermsg){
+    //   notlogin=false
+    // }
   },
   methods: {
 
@@ -218,7 +236,19 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          delete this.userregisterform.checkpass
+          var url=common.apiurla+"aregister"
+          var a = JSON.stringify(this.userregisterform);
+
+          console.log(a)
+          this.$http.post(url,a,{emulateJSON:true}).then(function (res) {
+            console.log(res)
+            registerFormVisible=false
+            this.$message("注册成功")
+          },function(err){
+            console.log(err)
+            this.$message("用户名已存在")
+          })
         } else {
           console.log('error submit!!');
           return false;
@@ -234,14 +264,57 @@ export default {
     toMain:function() {
       this.$router.push('/');
     },
+    toApplyprocess:function() {
+      this.$router.push('/main/v_apply_process');
+    },
     registertoUser(){
       delete this.userregisterform.checkpass
-      var url=common.apiurl+"/aregister"
+      var url=common.apiurl+"aregister"
       var a = JSON.stringify(this.userregisterform);
 
       console.log(a)
       this.$http.post(url,a,{emulateJSON:true}).then(function (res) {
         console.log(res)
+        this.$message("注册成功")
+      },function(err){
+        console.log(err)
+        this.$message("用户名已存在")
+      })
+    },
+    registertoVolunteer(){
+      delete this.userregisterform.checkpass
+      var url=common.apiurl+"vregister"
+      var a = JSON.stringify(this.userregisterform);
+
+      console.log(a)
+      this.$http.post(url,a,{emulateJSON:true}).then(function (res) {
+        console.log(res)
+      },function(err){console.log(err)})
+    },
+    login(){
+      var url=common.apiurla+"login"
+      var a = JSON.stringify(this.userloginform);
+      this.notlogin=false
+
+      console.log(a)
+      this.$http.post(url,a,{emulateJSON:true}).then(function (res) {
+        console.log(res)
+        // console.log(res.data)
+        this.usermsg=res.data
+        this.accountid=this.usermsg.username
+        console.log("账号是"+this.accountid)
+        this.loginFormVisible = false
+        this.$message('登录成功');
+        this.$router.push({
+          name: 'share',
+          params: {
+            priority:this.usermsg.priority
+          }
+        });
+      },function(err){
+        console.log(err)
+        this.loginFormVisible = false
+        this.$message('账号或密码不正确');
       })
     }
 
@@ -318,7 +391,7 @@ width: 80%;
     top: 0px;
     text-align: right;
     width: 100%;
-    z-index: 3;
+    z-index: 10;
   }
   .el-menu--horizontal{
     border-bottom:0px;

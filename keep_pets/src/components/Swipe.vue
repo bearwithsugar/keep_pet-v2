@@ -4,12 +4,13 @@
     enter-active-class="bounceInLeft"
     leave-active-class="bounceOutRight"
   >
-   <div class="ui" >
+   <div class="ui">
+     <!--轮播图-->
     <el-carousel height="700px">
-      <el-carousel-item v-for="(image,index) in Imglist" :key="Imglist">
+      <el-carousel-item v-for="(image,index) in Imglist" track-ty='index' :key="index">
         <div style="position: relative ;    height: 500px;">
           <div style="position: absolute;z-index: 2"  >
-            <img :src=image.url width="100%"></div>
+            <img :src=image.url height="700x" width="100%"></div>
           <div class="image_text" v-text=image.text></div>
         </div>
       </el-carousel-item>
@@ -55,8 +56,10 @@
       </el-cascader>
     </div>
 
+
+     <!--显示热门宠物-->
     <el-row class="show_pets">
-      <el-col :span="8" v-for="(pet,index) in petsMessage" :offset="index > 0 ? 2 : 0" :key="petsMessage">
+      <el-col :span="8" v-for="(pet,index) in petsMessage" :offset="index > 0 ? 2 : 0" :key="index" track-ty='index'>
         <router-link v-bind="{to:'/detail/'+pet.anno}"  style="text-decoration: none">
           <el-card :body-style="{ padding: '0px' }" shadow="hover" >
             <img src="../../static/images/cat3.jpg" class="image">
@@ -74,11 +77,126 @@
 
     <div class="title">关于我们</div>
 
-    <div  style="background: white">
+    <div id="box1" class="team_message" >
+
+      <div style="position: absolute;z-index: 1"  >
+          <transition
+            name="bounce"
+            enter-active-class="bounceInLeft"
+            leave-active-class="bounceOutLeft"
+          >
+          <el-row v-if="showOne">
+            <el-col :span="8"  :offset=" 2 " style="margin-top:20%;margin-left:15%;width: 30%">
+              <el-card :body-style="{ padding: '0px' }">
+                <img src="../../static/images/cat3.jpg" class="image">
+                <div style="padding: 14px;">
+                  <span>姓名</span>
+                  <div class="bottom clearfix">
+                    <time class="time">{{ currentDate }}</time>
+                    <el-button type="text" class="button">操作按钮</el-button>
+                  </div>
+                </div>
+              </el-card>
+            </el-col>
+          </el-row>
+          </transition>
+        </div>
+      <div style="position: absolute;z-index: 2">
+        <transition
+          name="bounce"
+          enter-active-class="bounceInLeft"
+          leave-active-class="bounceOutLeft"
+        >
+          <el-row v-if="showTwo">
+          <el-col :span="8"  :offset=" 2 " style="margin-top:55%;margin-left:15%;width: 30%">
+            <el-card :body-style="{ padding: '0px' }">
+              <img src="../../static/images/cat3.jpg" class="image">
+              <div style="padding: 14px;">
+                <span>姓名</span>
+                <div class="bottom clearfix">
+                  <time class="time">{{ currentDate }}</time>
+                  <el-button type="text" class="button">操作按钮</el-button>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+        </transition>
+      </div>
+      <div style="position: absolute;z-index: 3">
+        <transition
+          name="bounce"
+          enter-active-class="bounceInRight"
+          leave-active-class="bounceOutRight"
+        >
+          <el-row v-if="showThree">
+          <el-col :span="8"  :offset=" 2 " style="margin-top:10%;margin-left:55%;width: 30%">
+            <el-card :body-style="{ padding: '0px' }">
+              <img src="../../static/images/cat3.jpg" class="image">
+              <div style="padding: 14px;">
+                <span>姓名</span>
+                <div class="bottom clearfix">
+                  <time class="time">{{ currentDate }}</time>
+                  <el-button type="text" class="button">操作按钮</el-button>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+        </transition>
+      </div>
+      <div style="position: absolute;z-index: 4">
+        <transition
+          name="bounce"
+          enter-active-class="bounceInRight"
+          leave-active-class="bounceOutRight"
+        >
+        <el-row v-if="showFour">
+          <el-col :span="8"  :offset=" 2 " style="margin-top:40%;margin-left:55%;width: 30%">
+            <el-card :body-style="{ padding: '0px' }">
+              <img src="../../static/images/cat3.jpg" class="image">
+              <div style="padding: 14px;">
+                <span>姓名</span>
+                <div class="bottom clearfix">
+                  <time class="time">{{ currentDate }}</time>
+                  <el-button type="text" class="button">操作按钮</el-button>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+        </transition>
+      </div>
+      <div style="position: absolute;z-index: 5">
+        <transition
+          name="bounce"
+          enter-active-class="bounceInRight"
+          leave-active-class="bounceOutRight"
+        >
+        <el-row v-if="showFive">
+          <el-col :span="8"  :offset=" 2 " style="margin-top:70%;margin-left:55%;width: 30%">
+            <el-card :body-style="{ padding: '0px' }">
+              <img src="../../static/images/cat3.jpg" class="image">
+              <div style="padding: 14px;">
+                <span>姓名</span>
+                <div class="bottom clearfix">
+                  <time class="time">{{ currentDate }}</time>
+                  <el-button type="text" class="button">操作按钮</el-button>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+        </transition>
+      </div>
 
 
     </div>
-  </div>
+     <div class="bottom_menu">
+
+     </div>
+
+   </div>
   </transition>
 </template>
 
@@ -95,7 +213,13 @@
     data(){
 
       return{
+        showOne:false,
+        showTwo:false,
+        showThree:false,
+        showFour:false,
+        showFive:false,
         initSuccess: false,
+
         petsMessage:[],
         Imglist:[
           {url:image5,text:"为动物找寻一个温暖的家"},
@@ -115,9 +239,7 @@
           {id:9,url:image1},
         ],
         input:'',
-
         currentDate: new Date(),
-
         options: [{
           value: 'Chian',
           label: '中国',
@@ -311,23 +433,16 @@
       }
     },
     created() {
-      this.initSlot();
-      this.gethot()
+      this.gethot(),
+        window.addEventListener('scroll', this.handleScroll)
     },
+
     methods: {
       handleChange(value) {
         console.log(value);
       },
-      initSlot() {
-        let vm = this;
-        setTimeout(function () {
-          vm.initSuccess = true;
-        }, (Number(vm.time || 500)));
-      },
       gethot(){
-        console.log("开始获取")
-        var url = common.apiurl+'helpanimal/showAll';
-
+        var url = common.apiurlb+'helpanimal/showHot';
         this.$http.get(url).then(function (response) {
           console.log(response)
           var msg = response.body;
@@ -339,6 +454,42 @@
       },
       toSearch:function() {
         this.$router.push('/search');
+      },
+      handleScroll () {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        //console.log(scrollTop)
+       var s=document.body.scrollHeight;
+        //console.log(s)
+        var a=s-scrollTop
+
+
+
+
+        if (a<2000&&a>1200) {
+          this.showOne = true
+        } else {
+          this.showOne = false
+        }
+        if (a<1500&&a>700) {
+          this.showTwo = true
+        } else {
+          this.showTwo = false
+        }
+        if (a<2300&&a>1400) {
+          this.showThree = true
+        } else {
+          this.showThree = false
+        }
+        if (a<1800&&a>1000) {
+          this.showFour = true
+        } else {
+          this.showFour = false
+        }
+        if (a<1400&&a>600) {
+          this.showFive = true
+        } else {
+          this.showFive = false
+        }
       },
 
     }
@@ -407,9 +558,9 @@
     background-attachment: fixed;
   }
 
-  .item {
-    padding: 0;
-  }
+  /*.item {*/
+    /*padding: 0;*/
+  /*}*/
 
   .box-card {
     padding: 0px;
@@ -417,5 +568,16 @@
 
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
+  }
+
+  .team_message{
+    background: white;
+    position: relative;
+    height: 1300px;
+  }
+  .bottom_menu{
+    float: bottom;
+    height: 300px;
+    background-color:rgba(0,0,0,0.8);
   }
 </style>

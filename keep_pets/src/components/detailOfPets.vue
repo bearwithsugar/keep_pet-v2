@@ -1,12 +1,12 @@
 <template>
 
     <div >
-    <div class="background"></div>
+    <div class="background" v-bind:style="{ backgroundImage: 'url('+'http://150.109.76.174:8081'+pet.picture+')'}"></div>
     <div style="padding-right: 15%;padding-left: 15%;padding-top: 5%">
       <el-row>
         <el-col :span="8" >
           <el-card :body-style="{ padding: '0px' }">
-            <img src="../../static/images/cat.jpg" class="image">
+            <img :src="'http://150.109.76.174:8081/'+pet.picture" class="image">
           </el-card>
         </el-col>
       </el-row>
@@ -55,11 +55,12 @@
 
 
 
-      <div style="padding-bottom: 10%" size="medium">
-        <el-button type="success">立刻领养</el-button>
-      </div>
 
-
+      <router-link to="/main/apply_form">
+        <div style="padding-bottom: 10%" size="medium">
+          <el-button type="success">立刻领养</el-button>
+        </div>
+      </router-link>
 
     </div>
 
@@ -74,11 +75,11 @@
 
 
       return{
+        url:"../../static/images/cat.jpg",
         pet:{},
         id:{anno:''},
         initSuccess:false,
         currentDate: new Date(),
-        petDetail:[]
       }
 
     },
@@ -98,7 +99,7 @@
         }, (Number(vm.time || 500)));
       },
       postPetid(){
-        var url= common.apiurl+"helpanimal/showSingle"
+        var url= common.apiurlb+"helpanimal/showSingle"
         var a = JSON.stringify(this.id);
         console.log(a)
         this.$http.post(url,a,{emulateJSON:true}).then(function (res) {
@@ -108,7 +109,7 @@
           console.log(this.pet.anname)
 
         })
-      }
+      },
     }
 
   }
@@ -121,7 +122,7 @@
     height: 100%;
     top: 0px;
     /*放置背景图*/
-    background-image: url(../../static/images/cat.jpg);
+    /*background-image: url(../../static/images/cat.jpg);*/
     /*设置背景图大小*/
     background-size: 100% 100%;
     /*虚化背景图*/

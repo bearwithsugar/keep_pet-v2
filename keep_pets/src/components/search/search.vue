@@ -1,22 +1,27 @@
 <template>
-  <div style="background: white;padding: 5%">
+  <transition
+    name="bounce"
+    enter-active-class="bounceInLeft"
+    leave-active-class="bounceOutRight"
+  >
+    <div v-show="initSuccess" style="background: white;padding: 5%">
     <el-card class="box-card" :body-style="{ padding: '0px' }">
       <div >
-        <el-input placeholder="请输入内容" v-model="searchMessage" class="input-with-select">
+        <el-input placeholder="请输入内容" v-model="searchKey.description" class="input-with-select">
 
-          <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-button slot="append" icon="el-icon-search" @click="postSearch"></el-button>
         </el-input>
       </div>
     </el-card>
     <div>
 
       <el-row class="show_pets">
-        <el-col :span="8" v-for="(pet,index) in Pets" :offset="2" :key="Pets">
+        <el-col :span="8" v-for="(pet,index) in petsMessage" :offset="2" :key="index">
           <router-link v-bind="{to:'/detail/'+pet.id}"  style="text-decoration: none">
             <el-card :body-style="{ padding: '0px' }" shadow="hover" >
-              <img :src=pet.url class="image">
+              <img src="../../../static/images/cat3.jpg" class="image">
               <div style="padding: 14px;">
-                <span>好吃的汉堡</span>
+                <span>{{pet.anname}}</span>
                 <div class="bottom clearfix">
                   <el-button type="text" class="button" >操作按钮</el-button>
                 </div>
@@ -26,8 +31,8 @@
         </el-col>
       </el-row>
     </div>
-
   </div>
+  </transition>
 </template>
 
 <script>
@@ -38,33 +43,50 @@
   {
     data(){
       return{
-        searchMessage:'',
-        Pets:[
-          {id:1,url:image1},
-          {id:2,url:image1},
-          {id:3,url:image1},
-          {id:4,url:image1},
-          {id:5,url:image1},
-          {id:6,url:image1},
-          {id:7,url:image1},
-          {id:8,url:image1},
-          {id:9,url:image1},
+        initSuccess: false,
+        petsMessage:[
         ],
+        searchKey:{
+          description: '',
+          isSaveRecord:1
+        }
       }
 
     },
     created(){
-      this.postPetid()
+      this.initSlot()
+      this.getAll()
+
+
     },
     methods:{
-      postPetid(){
-        var url= common.apiurl+"helpanimal/showSearch"
-        var a = JSON.stringify({description:"温顺",isSaveRecord:1});
+      initSlot() {
+        let vm = this;
+        setTimeout(function () {
+          vm.initSuccess = true;
+        }, (Number(vm.time || 500)));
+      },
+      postSearch(){
+        var url= common.apiurlb+"helpanimal/showSearch"
+        var a = JSON.stringify(this.searchKey);
         console.log(a)
         this.$http.post(url,a,{emulateJSON:true}).then(function (response) {
           console.log(response)
+          console.log(response.data.data)
+          this.petsMessage=response.data.data
           // alert(res)
         })
+      },
+      getAll(){
+        var url = common.apiurlb+'helpanimal/showAll';
+        this.$http.get(url).then(function (response) {
+          console.log(response)
+          var msg = response.body;
+          this.petsMessage=msg.data;
+          console.log("展示全部"+this.petsMessage)
+        });
+
+
       },
     }
 

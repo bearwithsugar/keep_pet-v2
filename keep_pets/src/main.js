@@ -22,8 +22,10 @@ new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  fontFamily:"Microsoft YaHei"
 })
 router.afterEach((to,from,next) => {
   window.scrollTo(0,0);
 });
+

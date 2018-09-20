@@ -11,7 +11,7 @@
           background-color="#ffffff"
           text-color="#909399"
           active-text-color="#f90">
-          <el-submenu index="1" v-if="lingyangzhongxin">
+          <el-submenu index="1" >
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>领养中心</span>
@@ -32,7 +32,7 @@
             </el-submenu>
           </el-submenu>
           <router-link to="/main/share">
-            <el-menu-item index="3" v-if="lingyangfankui">
+            <el-menu-item index="3" >
               <i class="el-icon-menu"></i>
               <span slot="title">领养反馈</span>
             </el-menu-item>
@@ -46,7 +46,7 @@
           </router-link>
 
           <router-link :to="{name: 'usermessage'}">
-            <el-menu-item index="5" v-if="gerenzhongxin">
+            <el-menu-item index="5">
               <i class="el-icon-setting"></i>
               <span slot="title">个人中心</span>
             </el-menu-item>
@@ -57,14 +57,43 @@
               <span slot="title">查看管理员</span>
             </el-menu-item>
           </router-link>
-          <el-menu-item index="7" v-if="xinzengguanliyuan">
+          <router-link to="/main/addmanager">
+            <el-menu-item index="7" v-if="xinzengguanliyuan">
+              <i class="el-icon-setting"></i>
+              <span slot="title">新增管理员</span>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/main/u_apply_process">
+            <el-menu-item index="8" v-if="lingyangjincheng">
+              <i class="el-icon-setting"></i>
+              <span slot="title">领养进程</span>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/main/v_apply_process">
+            <el-menu-item index="9" v-if="lingyangshenqing">
+              <i class="el-icon-setting"></i>
+              <span slot="title">领养申请</span>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/main/save">
+            <el-menu-item index="10" v-if="woyaojiuzhu">
+              <i class="el-icon-setting"></i>
+              <span slot="title">我要救助</span>
+            </el-menu-item>
+          </router-link>
+          <el-menu-item index="11" v-if="lingyangjincheng">
             <i class="el-icon-setting"></i>
-            <span slot="title">新增管理员</span>
+            <span slot="title">领养进程</span>
           </el-menu-item>
-          <el-menu-item index="8" v-if="wodelingyang">
+          <el-menu-item index="12" v-if="jiuzhushenqing">
             <i class="el-icon-setting"></i>
-            <span slot="title">我的领养</span>
+            <span slot="title">救助申请</span>
           </el-menu-item>
+          <el-menu-item index="13" v-if="jiuzhujincheng">
+          <i class="el-icon-setting"></i>
+          <span slot="title">救助进程</span>
+        </el-menu-item>
+
         </el-menu>
       </el-col>
 
@@ -83,23 +112,40 @@
   export default {
     data(){
       return{
-        lingyangzhongxin:false,
+        userPriority:4,
+
+
         xinggeceshi:false,
-        lingyangfankui:false,
-        gerenzhongxin:false,
         xinzengguanliyuan:false,
         chakanguanliyuan:false,
-        wodelingyang:false
+        lingyangjincheng:false,
+        lingyangshenqing:false,
+        woyaojiuzhu:false,
+        jiuzhushenqing:false,
+        jiuzhujincheng:false,
+
 
       }
     },
     created(){
-      var flag=this.$route.params.user;
-      if(flag=="user"){
-        this.lingyangfankui=this.lingyangzhongxin=this.xinggeceshi=this.gerenzhongxin=this.wodelingyang=true
-      }else if(flag=="superManger"){
+      this.userPriority=this.$route.params.priority
+      console.log(this.userPriority)
+      if(this.userPriority==3){
+        this.xinggeceshi=this.lingyangjincheng=true
+      }else if(this.userPriority==0){
         this.chakanguanliyuan=this.xinzengguanliyuan=true
       }
+      else if(this.userPriority==2){
+        this.woyaojiuzhu=this.jiuzhujincheng=true
+      }else if(this.userPriority==1){
+        this.lingyangshenqing=this.jiuzhushenqing=true
+      }
+      // var flag=this.$route.params.user;
+      // if(flag=="user"){
+      //   this.lingyangfankui=this.lingyangzhongxin=this.xinggeceshi=this.gerenzhongxin=this.wodelingyang=true
+      // }else if(flag=="superManger"){
+      //   this.chakanguanliyuan=this.xinzengguanliyuan=true
+      // }
         },
     methods: {
       handleOpen(key, keyPath) {

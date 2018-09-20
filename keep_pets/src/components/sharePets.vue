@@ -12,11 +12,11 @@
             :autosize="{ minRows: 2, maxRows: 4}"
             placeholder="分享您的领养宠物"
             style="padding: 0% 10%"
-            v-model="editshare"
+            v-model="editshare.feedback"
           >
           </el-input>
           <div style="padding-top: 3%">
-            <el-button type="success" icon="el-icon-check" circle></el-button>
+            <el-button type="success" icon="el-icon-check" circle @click="postRemark"></el-button>
             <el-button type="danger" icon="el-icon-delete" circle @click="resetedit"></el-button>
           </div>
     </div>
@@ -45,12 +45,14 @@
 </template>
 
 <script>
+  import common from '../com/common'
   export default {
     data() {
       return {
         dialogImageUrl: '',
         dialogVisible: false,
-        editshare:'',
+
+        editshare:{feedback:''},
         initSuccess: false,
         currentDate: new Date()
       };
@@ -67,7 +69,7 @@
         }, (Number(vm.time || 500)));
       },
       resetedit(){
-        this.editshare=''
+        this.editshare.feedback=''
       },
       handleRemove(file, fileList) {
         console.log(file, fileList);
@@ -75,6 +77,16 @@
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
+      },
+      postRemark(){
+        var url=common.apiurl+"helpanimal/setFeedback"
+        var a = JSON.stringify(this.editshare);
+
+        console.log(a)
+        this.$http.post(url,a,{emulateJSON:true}).then(function (res) {
+          console.log(res)
+          // alert(res)
+        })
       }
     }
   }
